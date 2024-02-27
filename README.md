@@ -25,6 +25,35 @@ axios
 
 The GET method makes a request to the API endpoint, 'http://localhost:8502/api/posts'. 
 
+DELETE
+The app first looks for post with specified postID, then deletes it from the database using sql operation. 
+const deletePost = async (req, res) => {
+  console.log("Deleting post with postID:", req.params.id);
+  const postID = req.params.id;
+
+  try {
+    // Ensure the post exitst
+    const [isExisting] = await db.pool.query(
+      "SELECT 1 FROM Posts WHERE postID = ?",
+      [postID]
+    );
+    // If the post doesn't exist, return an error
+    if (isExisting.length === 0) {
+      return res.status(404).send("Post not found");
+    }
+
+    // Delete the post from Posts
+    await db.pool.query("DELETE FROM Posts WHERE postID = ?", [postID]);
+
+    // Return the appropriate status code
+    res.status(204).json({ message: "Post deleted successfully" })
+  } catch (error) {
+    console.error("Error deleting post from the database:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 **Receiving data**
 Data is fetched using HTTP requests
 
@@ -44,4 +73,7 @@ const getPosts = async (req, res) => {
     res.status(500).json({ error: "Error fetching posts" });
   }
 };
-The rows of data will be displayed in JSON and converted to a table, with a status code 200. Status code 500 means an error fetching the posts
+The rows of data will be displayed in JSON and converted to a table, with a status code 200, and status code 500 means an error fetching the posts.
+
+DELETE
+204 means success, 500 means error.
