@@ -77,3 +77,7 @@ The rows of data will be displayed in JSON and converted to a table, with a stat
 
 DELETE
 204 means success, 500 means error.
+
+
+UML image:
+![alt text] (https://github.com/ktsuny/post-it-app-backend/blob/master/post-it-app%20UML.jpg)
