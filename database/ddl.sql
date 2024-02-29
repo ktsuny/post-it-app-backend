@@ -1,4 +1,6 @@
 SET FOREIGN_KEY_CHECKS=0;
+CREATE DATABASE post_it_app
+USE post_it_app
 
 DROP TABLE IF EXISTS Posts;
 CREATE TABLE Posts (
@@ -35,6 +37,15 @@ VALUES ('Sunny S', 'Technology in the 21st Century', 'Discussing the impact of t
 --     FOREIGN KEY (authorID) REFERENCES Authors(authorID),
 --     FOREIGN KEY (postID) REFERENCES Posts(postID) ON DELETE CASCADE 
 -- );
+
+DROP TABLE IF EXISTS Users;
+CREATE TABLE Users (
+    userID int AUTO_INCREMENT,
+    username varchar(50),
+    email varchar(50),
+    password varchar(255),
+    PRIMARY KEY (userID) 
+);
 
 -- DROP TABLE IF EXISTS Authors;
 -- CREATE TABLE Authors (
