@@ -19,18 +19,36 @@ const getPosts = async (req, res) => {
   }
 };
 
+// Returns a single post by their unique ID 
+const getPostByID = async (req, res) => {
+  try {
+    const postID = req.params.id;
+    const query = "SELECT * FROM Posts WHERE postID = ?";
+    const [result] = await db.pool.query(query, [postID]);
+    // Check if post was found
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+    const post = result[0];
+    res.json(post);
+  } catch (error) {
+    console.error("Error fetching post from the database:", error);
+    res.status(500).json({ error: "Error fetching post" });
+  }
+};
 
 // Returns status of creation of new post in Posts
 const createPost = async (req, res) => {
+  console.log("create Posts working")
   try {
-    const { authorID, title, body} = req.body;
+    const { user, title, body} = req.body;
     const query =
-      "INSERT INTO Posts (authorID, title, body) VALUES (?, ?, ?, ?)";
+      "INSERT INTO Posts (user, title, body) VALUES (?, ?, ?)";
 
-    const response = await db.query(query, [
-      authorID,
+    const response = await db.pool.query(query, [
+      user,
       title,
-      body,
+      body
     ]);
     res.status(201).json(response);
   } catch (error) {
@@ -48,16 +66,16 @@ const updatePost = async (req, res) => {
   const newPost = req.body;
 
   try {
-    const [data] = await db.pool.query("SELECT * FROM bsg_people WHERE id = ?", [
-      personID,
+    const [data] = await db.pool.query("SELECT * FROM Posts WHERE postID = ?", [
+      postID,
     ]);
 
     const oldPost = data[0];
 
     // If any attributes are not equal, perform update
-    if (!lodash.isEqual(newPerson, oldPerson)) {
+    if (!lodash.isEqual(newPost, oldPost)) {
       const query =
-        "UPDATE bsg_people SET title, body, updatedAt";
+        "UPDATE Posts SET title, body, updatedAt";
       const values = [
         newPost.title,
         newPost.body,
@@ -109,6 +127,7 @@ const deletePost = async (req, res) => {
 // Export the functions as methods of an object
 module.exports = {
   getPosts,
+  getPostByID,
   createPost,
   updatePost,
   deletePost,

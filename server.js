@@ -31,8 +31,7 @@ app.get('/', (req, res) => {
 })
 // Routes:
 app.use("/api/posts", require("./routes/postRoutes"));
-app.use("/api/users", require('./routes/userRoutes'))
-//app.use("/api/people", require("./routes/peopleRoutes"));
+//app.use("/api/posts", require("./routes/postsRoutes"));
 
 app.listen(PORT, () => {
   // Change to whatever FLIP server you're on, copy and paste URL into browser to test:

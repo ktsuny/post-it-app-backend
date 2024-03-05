@@ -5,7 +5,7 @@ USE post_it_app
 DROP TABLE IF EXISTS Posts;
 CREATE TABLE Posts (
     postID int(11) AUTO_INCREMENT,
-    authorID varchar(50),
+    user varchar(50),
     title varchar(70) NOT NULL,
     body varchar(1000) NOT NULL,
     createdAt datetime,
@@ -19,10 +19,10 @@ CREATE TABLE Posts (
     -- commentsID int,
 
 
-INSERT INTO Posts (authorID, title, body, createdAt, updatedAt, likes, comments) 
+INSERT INTO Posts (user, title, body, createdAt, updatedAt, likes, comments) 
 VALUES ('Jone Doe', 'The Wonders of Nature', 'This is a post about the beauty of the natural world.', NOW(), NOW(), 10, 2);
 
-INSERT INTO Posts (authorID, title, body, createdAt, updatedAt, likes, comments) 
+INSERT INTO Posts (user, title, body, createdAt, updatedAt, likes, comments) 
 VALUES ('Sunny S', 'Technology in the 21st Century', 'Discussing the impact of technology on modern life.', NOW(), NOW(), 5, 1);
 
 -- DROP TABLE IF EXISTS Comments;
