@@ -41,14 +41,14 @@ const getPostByID = async (req, res) => {
 const createPost = async (req, res) => {
   console.log("create Posts working")
   try {
-    const { user, title, body} = req.body;
+    const { user, title, text} = req.body;
     const query =
-      "INSERT INTO Posts (user, title, body) VALUES (?, ?, ?)";
+      "INSERT INTO Posts (user, title, text) VALUES (?, ?, ?)";
 
     const response = await db.pool.query(query, [
       user,
       title,
-      body
+      text
     ]);
     res.status(201).json(response);
   } catch (error) {
@@ -78,8 +78,7 @@ const updatePost = async (req, res) => {
         "UPDATE Posts SET title, body, updatedAt";
       const values = [
         newPost.title,
-        newPost.body,
-        newPost.updatedAt
+        newPost.text,
       ];
       // Perform the update
       await db.pool.query(query, values);

@@ -7,7 +7,7 @@ CREATE TABLE Posts (
     postID int(11) AUTO_INCREMENT,
     user varchar(50),
     title varchar(70) NOT NULL,
-    body varchar(1000) NOT NULL,
+    text varchar(1000) NOT NULL,
     createdAt datetime,
     updatedAt datetime,
     likes int, 
@@ -19,10 +19,10 @@ CREATE TABLE Posts (
     -- commentsID int,
 
 
-INSERT INTO Posts (user, title, body, createdAt, updatedAt, likes, comments) 
+INSERT INTO Posts (user, title, text, createdAt, updatedAt, likes, comments) 
 VALUES ('Jone Doe', 'The Wonders of Nature', 'This is a post about the beauty of the natural world.', NOW(), NOW(), 10, 2);
 
-INSERT INTO Posts (user, title, body, createdAt, updatedAt, likes, comments) 
+INSERT INTO Posts (user, title, text, createdAt, updatedAt, likes, comments) 
 VALUES ('Sunny S', 'Technology in the 21st Century', 'Discussing the impact of technology on modern life.', NOW(), NOW(), 5, 1);
 
 -- DROP TABLE IF EXISTS Comments;
