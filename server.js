@@ -8,13 +8,13 @@ const PORT = process.env.PORT || 3002;
 // Middleware:
 
 // If on FLIP, use cors() middleware to allow cross-origin requests from the frontend with your port number:
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(cors());
 app.use(express.json());
 
 // Curb Cores Error by adding a header here
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173")
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
