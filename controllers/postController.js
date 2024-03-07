@@ -12,10 +12,10 @@ const getPosts = async (req, res) => {
     const [rows] = await db.pool.query(query);
     console.log(rows)
     // Send back the rows to the client
-    res.status(200).json(rows);
+    return res.status(200).json(rows);
   } catch (error) {
     console.error("Error fetching posts from the database:", error);
-    res.status(500).json({ error: "Error fetching posts" });
+    return res.status(500).json({ error: "Error fetching posts" });
   }
 };
 
@@ -30,10 +30,10 @@ const getPostByID = async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
     const post = result[0];
-    res.json(post);
+    return res.json(post);
   } catch (error) {
     console.error("Error fetching post from the database:", error);
-    res.status(500).json({ error: "Error fetching post" });
+    return res.status(500).json({ error: "Error fetching post" });
   }
 };
 
@@ -50,12 +50,12 @@ const createPost = async (req, res) => {
       title,
       text
     ]);
-    res.status(201).json(response);
+    return res.status(201).json(response);
   } catch (error) {
     // Print the error for the dev
     console.error("Error creating post:", error);
     // Inform the client of the error
-    res.status(500).json({ error: "Error creating post" });
+    return res.status(500).json({ error: "Error creating post" });
   }
 };
 
@@ -89,7 +89,7 @@ const updatePost = async (req, res) => {
     res.json({ message: "Post details are the same, no update" });
   } catch (error) {
     console.log("Error updating post", error);
-    res
+    return res
       .status(500)
       .json({ error: `Error updating the post with id ${postID}` });
   }
@@ -116,10 +116,10 @@ const deletePost = async (req, res) => {
     await db.pool.query("DELETE FROM Posts WHERE postID = ?", [postID]);
 
     // Return the appropriate status code
-    res.status(204).json({ message: "Post deleted successfully" })
+    return res.status(204).json({ message: "Post deleted successfully" })
   } catch (error) {
     console.error("Error deleting post from the database:", error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 

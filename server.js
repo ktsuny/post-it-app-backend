@@ -3,7 +3,7 @@ const cors = require("cors")
 require("dotenv").config()
 
 const app = express()
-const PORT = process.env.PORT || 3002
+const PORT = process.env.PORT || 3002 
 
 // Middleware:
 
@@ -31,9 +31,11 @@ app.get('/', (req, res) => {
 })
 // Routes:
 app.use("/api/posts", require("./routes/postRoutes"));
-//app.use("/api/posts", require("./routes/postsRoutes"));
+app.use("/api/users", require("./routes/userRoutes"))
+app.use("/api/comments", require("./routes/commentRoutes"))
+
 
 app.listen(PORT, () => {
   // Change to whatever FLIP server you're on, copy and paste URL into browser to test:
-  console.log(`Server running:  http://flip2.engr.oregonstate.edu:${PORT}...`)
+  console.log(`Server running on port: ${PORT}...`)
 });
