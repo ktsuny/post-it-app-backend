@@ -1,23 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const {
-  getPosts,
-  getPostByID,
-  createPost,
-  updatePost,
-  deletePost,
-} = require("../controllers/postController");
-
+const postController = require("../controllers/postController");
 const likesController = require("../controllers/likeController")
+const requireAuth = require("../middleware/requireAuth")
 
-router.get("/", getPosts);
-router.get("/:id", getPostByID);
-router.post("/", createPost);
-router.put("/:id", updatePost);
-router.delete("/:id", deletePost);
-
+router.get("/", postController.getPosts);
+router.get("/:id", postController.getPostByID);
 router.get("/:id/likes", likesController.getLikes)
-router.post("/:id/like", likesController.addLike)
-router.delete("/:id/unlike", likesController.deleteLikeByID)
+
+// require auth middleware
+// router.use(requireAuth)
+
+// create post
+router.post("/", postController.createPost)
+
+// update post
+router.put("/:id", postController.updatePost)
+
+// delete post
+router.delete("/:id", postController.deletePost)
+
+// like post
+router.post("/:id/like", likesController.handleLike)
+
 
 module.exports = router;

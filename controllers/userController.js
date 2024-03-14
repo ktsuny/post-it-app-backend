@@ -5,6 +5,23 @@ const saltRounds = 10
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
 
+exports.getUserByID = async(req, res) => {
+	try {
+
+		const {id} = req.params
+		const query = `
+			SELECT username, userID
+				FROM Users 
+				WHERE userID = ?
+			`
+		const [row] = await db.pool.query(query, [id])
+
+		return res.status(200).json(row[0])
+	} catch (error) {
+		res.status(500).send({message: error.message})
+	}
+}
+
 exports.registerUser = async (req, res) => {
 	const { username, email, password } = req.body
 
@@ -43,6 +60,7 @@ exports.registerUser = async (req, res) => {
 		return res.status(200).json({
 			message: "Registration successful",
 			username: username,
+			userID: result.userID,
 			token
 		})
 
@@ -83,6 +101,7 @@ exports.loginUser = async (req, res) => {
 			return res.status(200).json({
 				message: "Login successful",
 				username: result[0].username,
+				userID: result[0].userID,
 				token
 			})
 	

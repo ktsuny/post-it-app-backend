@@ -5,23 +5,24 @@ USE post_it_app
 DROP TABLE IF EXISTS Posts;
 CREATE TABLE Posts (
     postID int AUTO_INCREMENT,
-    user varchar(50),
+    userID int,
     title varchar(70) NOT NULL,
     text varchar(1000) NOT NULL,
     createdAt datetime,
     updatedAt datetime,
-    PRIMARY KEY (postID)
+    PRIMARY KEY (postID),
+    FOREIGN KEY (userID) REFERENCES Users(userID)
 );
     -- FOREIGN KEY (authorID) REFERENCES Authors(authorID)
     -- FOREIGN KEY (commentsID) REFERENCES Comments(CommentsID)
     -- commentsID int,
 
 
-INSERT INTO Posts (user, title, text, createdAt, updatedAt) 
-VALUES ('Jone Doe', 'The Wonders of Nature', 'This is a post about the beauty of the natural world.', NOW(), NOW());
+INSERT INTO Posts (userID, title, text, createdAt, updatedAt) 
+VALUES (7, 'The Wonders of Nature', 'This is a post about the beauty of the natural world.', NOW(), NOW());
 
 INSERT INTO Posts (user, title, text, createdAt, updatedAt) 
-VALUES ('Sunny S', 'Technology in the 21st Century', 'Discussing the impact of technology on modern life.', NOW(), NOW());
+VALUES (1, 'Technology in the 21st Century', 'Discussing the impact of technology on modern life.', NOW(), NOW());
 
 DROP TABLE IF EXISTS Comments;
 CREATE TABLE Comments (

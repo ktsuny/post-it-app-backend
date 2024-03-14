@@ -4,13 +4,11 @@ const lodash = require("lodash"); // Util to deep-compare two objects
 
 // Returns all rows of posts in Posts
 const getPosts = async (req, res) => {
-  console.log("get Posts working")
   try {
     // SQL query to select all rows from the "customers" table
     const query = "SELECT * FROM Posts";
     // Execute the query using the "db" object from the configuration file
     const [rows] = await db.pool.query(query);
-    console.log(rows)
     // Send back the rows to the client
     return res.status(200).json(rows);
   } catch (error) {
@@ -39,14 +37,14 @@ const getPostByID = async (req, res) => {
 
 // Returns status of creation of new post in Posts
 const createPost = async (req, res) => {
-  console.log("create Posts working")
+  // console.log("create Posts working")
   try {
-    const { user, title, text} = req.body;
+    const { userID, title, text} = req.body;
     const query =
-      "INSERT INTO Posts (user, title, text) VALUES (?, ?, ?)";
+      "INSERT INTO Posts (userID, title, text, createdAt, updatedAt) VALUES (?, ?, ?, NOW(), NOW())";
 
     const response = await db.pool.query(query, [
-      user,
+      userID,
       title,
       text
     ]);
@@ -60,39 +58,39 @@ const createPost = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-  // Get the post ID
-  const postID = req.params.id;
-  // Get the post object
-  const newPost = req.body;
+	try {
 
-  try {
-    const [data] = await db.pool.query("SELECT * FROM Posts WHERE postID = ?", [
-      postID,
-    ]);
+		const {id} = req.params
 
-    const oldPost = data[0];
+		if (!req.body.title || !req.body.text ){
+			return res.status(400).send({
+        message: 'All fields required',
+      })
+		}
 
-    // If any attributes are not equal, perform update
-    if (!lodash.isEqual(newPost, oldPost)) {
-      const query =
-        "UPDATE Posts SET title, body, updatedAt";
-      const values = [
-        newPost.title,
-        newPost.text,
-      ];
-      // Perform the update
-      await db.pool.query(query, values);
-      // Inform client of success and return 
-      return res.json({ message: "Post updated successfully." });
-    }
+		const { title, text } = req.body
+		
+		const query1 = `SELECT * FROM Posts WHERE postID = ?`
+		const [post] = await db.pool.query(query1, [id])
 
-    res.json({ message: "Post details are the same, no update" });
-  } catch (error) {
-    console.log("Error updating post", error);
-    return res
-      .status(500)
-      .json({ error: `Error updating the post with id ${postID}` });
-  }
+		// if post exists, perform update
+		if(post.length > 0){
+      console.log(post)
+			const query2 = `
+			UPDATE Posts
+				SET title = ?, text = ?, updatedAt = NOW()
+				WHERE postID = ?
+			`
+			await db.pool.query(query2, [title, text, id])
+			return res.status(200).json({message: 'Post successfully updated'})
+		} else {
+			return res.status(200).json({message: 'Post does not exist'})
+		}
+		
+		
+	} catch (error) {
+		res.status(500).send({message: error.message})
+	}
 };
 
 
