@@ -35,13 +35,13 @@ exports.registerUser = async (req, res) => {
 	}
 
 	if (!validator.isStrongPassword(password)) {
-		return res.status(400).json({message: 'Password not strong enough'})
+		return res.status(400).json({message: 'Password not strong enough (minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1)'})
 	}
 
 	try {
 		const [check] = await db.pool.query('SELECT * FROM users WHERE email = ?', [email])
 		if (check.length > 0){
-			return res.json({message: 'Email already exists'})
+			return res.status(400).json({message: 'Email already exists'})
 		}
 	
 		hashedPassword = await bcrypt.hash(password, saltRounds)

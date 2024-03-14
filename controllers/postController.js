@@ -17,6 +17,21 @@ const getPosts = async (req, res) => {
   }
 };
 
+const getUserSpecificPosts = async (req, res) => {
+  try {
+    const {id} = req.params
+    // SQL query to select all rows from the "customers" table
+    const query = "SELECT * FROM Posts WHERE userID = ?";
+    // Execute the query using the "db" object from the configuration file
+    const [rows] = await db.pool.query(query, [id]);
+    // Send back the rows to the client
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching posts from the database:", error);
+    return res.status(500).json({ error: "Error fetching posts" });
+  }
+};
+
 // Returns a single post by their unique ID 
 const getPostByID = async (req, res) => {
   try {
@@ -128,4 +143,5 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
+  getUserSpecificPosts
 };

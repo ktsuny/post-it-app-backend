@@ -4,8 +4,8 @@ const CommentController = require('../controllers/commentController')
 const requireAuth = require('../middleware/requireAuth')
 
 
-// get comments
-router.get('/', CommentController.getAllComments)
+// get comments for post
+router.get('/:id', CommentController.getAllCommentsForPost)
 
 // require auth
 router.use(requireAuth)

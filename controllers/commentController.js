@@ -16,10 +16,10 @@ exports.addComment = async (req, res) => {
 		const { body, userID, postID } = req.body
 
 		const query = `
-			INSERT INTO Comments(body, postID, userID)
-				VALUES(?, ?, ?)
+			INSERT INTO Comments(body, postID, userID, createdAt, updatedAt)
+				VALUES(?, ?, ?, NOW(), NOW())
 			`
-		const [result] = await db.pool.query(query, [body, userID, postID])
+		const [result] = await db.pool.query(query, [body, postID, userID])
 
 		return res.status(200).json(result)
 	} catch (error) {
@@ -27,17 +27,20 @@ exports.addComment = async (req, res) => {
 	}
 }
 
-exports.getAllComments = async (req, res) => {
+exports.getAllCommentsForPost = async (req, res) => {
 	try {
+			const {id} = req.params
+
 			const query = `
-			SELECT Users.username, Posts.postID, commentID, body
+			SELECT Users.username, Users.userID, Posts.postID, Comments.commentID, Comments.body, Comments.createdAt
 				FROM Comments
 				INNER JOIN Users
 				ON Users.userID = Comments.userID
 				INNER JOIN Posts
 				ON Posts.postID = Comments.postID
+				WHERE Comments.postID = ?
 			`
-		const [rows] = await db.pool.query(query)
+		const [rows] = await db.pool.query(query, [id])
 		console.log(rows)
 		return res.status(200).json(rows)
 	} catch (error) {
@@ -89,7 +92,7 @@ exports.editCommentByID = async (req, res) => {
 		if(comment){
 			const query2 = `
 			UPDATE Comments
-				SET body = ?
+				SET body = ?, updatedAt = NOW()
 				WHERE commentID = ?
 			`
 
